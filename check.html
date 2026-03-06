@@ -1,55 +1,132 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>邀请码验证</title>
-    <style>
-        body{text-align:center;margin-top:80px;font-family:Arial;}
-        .input-box{padding:12px 20px;font-size:18px;width:280px;margin:20px 0;}
-        .btn{padding:12px 40px;font-size:18px;background:#0078d4;color:white;border:none;border-radius:6px;cursor:pointer;}
-        .error{color:red;font-size:16px;margin-top:20px;}
-    </style>
+<meta charset="utf-8">
+<title>邀请码验证</title>
+
+<style>
+body{
+    text-align:center;
+    margin-top:80px;
+    font-family:Arial;
+}
+
+.input-box{
+    padding:12px 20px;
+    font-size:18px;
+    width:280px;
+    margin:20px 0;
+}
+
+.btn{
+    padding:12px 40px;
+    font-size:18px;
+    background:#0078d4;
+    color:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.btn:disabled{
+    background:#999;
+}
+
+.error{
+    color:red;
+    font-size:16px;
+    margin-top:20px;
+}
+</style>
 </head>
+
 <body>
-    <h2>请输入邀请码</h2>
-    <input type="text" id="inviteCode" class="input-box" placeholder="例如：Axxxxx">
-    <button onclick="checkCode()" class="btn">验证并进入</button>
-    <div id="errorMsg" class="error"></div>
+
+<h2>请输入邀请码</h2>
+
+<input 
+type="text" 
+id="inviteCode" 
+class="input-box" 
+placeholder="例如：A89765"
+onkeydown="if(event.key==='Enter'){checkCode()}"
+>
+
+<br>
+
+<button onclick="checkCode()" class="btn" id="submitBtn">
+验证并进入
+</button>
+
+<div id="errorMsg" class="error"></div>
 
 <script>
-// 50个有效邀请码（和之前生成的一致）
+
+// 所有有效邀请码
 const validCodes = [
-  "A89765","B78901","C67892","D56783","E45674",
-  "F34565","G23456","H12347","I01238","J90129",
-  "K89010","L78901","M67892","N56783","O45674",
-  "P34565","Q23456","R12347","S01238","T90129",
-  "U89010","V78901","W67892","X56783","Y45674",
-  "Z34565","AA1234","BB2345","CC3456","DD4567",
-  "EE5678","FF6789","GG7890","HH8901","II9012",
-  "JJ0123","KK1234","LL2345","MM3456","NN4567",
-  "OO5678","PP6789","QQ7890","RR8901","SS9012",
-  "TT0123","UU1234","VV2345","WW3456","XX4567","YY5678"
+"A89765","B78901","C67892","D56783","E45674",
+"F34565","G23456","H12347","I01238","J90129",
+"K89010","L78901","M67892","N56783","O45674",
+"P34565","Q23456","R12347","S01238","T90129",
+"U89010","V78901","W67892","X56783","Y45674",
+"Z34565","AA1234","BB2345","CC3456","DD4567",
+"EE5678","FF6789","GG7890","HH8901","II9012",
+"JJ0123","KK1234","LL2345","MM3456","NN4567",
+"OO5678","PP6789","QQ7890","RR8901","SS9012",
+"TT0123","UU1234","VV2345","WW3456","XX4567","YY5678"
 ];
 
-// 校验逻辑
-function checkCode() {
-    const inputCode = document.getElementById("inviteCode").value.trim().toUpperCase(); // 转大写，兼容小写输入
-    const errorMsg = document.getElementById("errorMsg");
-    
-    if (!inputCode) {
-        errorMsg.innerText = "❌ 请输入邀请码";
-        return;
-    }
-    
-    if (validCodes.includes(inputCode)) {
-        // 验证通过，跳转到小程序
-        window.location.href = "https://qr61.cn/oyEMCr/qQDtfeZ";
-    } else {
-        errorMsg.innerText = "❌ 邀请码无效或已过期";
-    }
+// 已使用邀请码
+let usedCodes = JSON.parse(localStorage.getItem("usedInviteCodes")) || [];
+
+function checkCode(){
+
+const inputCode = document
+.getElementById("inviteCode")
+.value
+.trim()
+.toUpperCase();
+
+const errorMsg = document.getElementById("errorMsg");
+const btn = document.getElementById("submitBtn");
+
+errorMsg.innerText="";
+
+if(!inputCode){
+errorMsg.innerText="❌ 请输入邀请码";
+return;
 }
+
+// 是否存在邀请码
+if(!validCodes.includes(inputCode)){
+errorMsg.innerText="❌ 邀请码无效";
+return;
+}
+
+// 是否已使用
+if(usedCodes.includes(inputCode)){
+errorMsg.innerText="❌ 该邀请码已被使用";
+return;
+}
+
+// 标记为已使用
+usedCodes.push(inputCode);
+localStorage.setItem("usedInviteCodes", JSON.stringify(usedCodes));
+
+btn.disabled=true;
+btn.innerText="验证成功，正在进入...";
+
+// 跳转草料表单
+setTimeout(()=>{
+window.location.href="https://qr61.cn/oyEMCr/qQDtfeZ";
+},800);
+
+}
+
 </script>
+
 </body>
 </html>
+
 
 
