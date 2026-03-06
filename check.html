@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>邀请码校验</title>
+    <style>
+        body{text-align:center;margin-top:60px;font-size:20px;}
+    </style>
+</head>
+<body>
+
+<script>
+// 50个有效邀请码（已填入上面生成的码）
+const validInviteCodes = [
+  "A89765","B78901","C67892","D56783","E45674",
+  "F34565","G23456","H12347","I01238","J90129",
+  "K89010","L78901","M67892","N56783","O45674",
+  "P34565","Q23456","R12347","S01238","T90129",
+  "U89010","V78901","W67892","X56783","Y45674",
+  "Z34565","AA1234","BB2345","CC3456","DD4567",
+  "EE5678","FF6789","GG7890","HH8901","II9012",
+  "JJ0123","KK1234","LL2345","MM3456","NN4567",
+  "OO5678","PP6789","QQ7890","RR8901","SS9012",
+  "TT0123","UU1234","VV2345","WW3456","XX4567","YY5678"
+];
+
+// 从链接获取邀请码
+const urlParams = new URLSearchParams(window.location.search);
+const invite = urlParams.get("invite");
+
+// 校验逻辑：通过则跳转到指定小程序链接
+if (invite && validInviteCodes.includes(invite)) {
+  window.location.href = "#小程序://草料二维码/MAtimamPsGRoqqz";
+} else {
+  document.write("<h2>❌ 邀请码无效或已过期</h2>");
+}
+</script>
+
+</body>
+</html>
